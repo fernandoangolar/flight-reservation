@@ -76,12 +76,19 @@ ALTER TABLE
 ALTER TABLE
     `bookings` ADD UNIQUE `booking_code_unique`(`booking_code`);
 
+ALTER TABLE `flights`
+MODIFY COLUMN `flight_id` BIGINT NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `bookings`
+MODIFY COLUMN `flight_id` BIGINT NOT NULL;
+
+
 
 ALTER TABLE
     `bookings` ADD CONSTRAINT `fk_user_id_bookings` FOREIGN KEY(`user_id`) REFERENCES `users`(`user_id`);
 
 ALTER TABLE
-    `bookings` ADD CONSTRAINT `fk_flight_id` FOREIGN KEY(`flight_id`) REFERENCES `flights`(`flight_id`);
+    `bookings` ADD CONSTRAINT `fk_flight_id_bookings` FOREIGN KEY(`flight_id`) REFERENCES `flights`(`flight_id`);
 
 ALTER TABLE
     `payments` ADD CONSTRAINT `fk_booking_id` FOREIGN KEY(`booking_id`) REFERENCES `bookings`(`booking_id`);
