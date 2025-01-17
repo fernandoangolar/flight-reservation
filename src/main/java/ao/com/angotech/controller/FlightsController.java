@@ -1,9 +1,8 @@
 package ao.com.angotech.controller;
 
-import ao.com.angotech.model.Flights;
+import ao.com.angotech.model.Flight;
 import ao.com.angotech.repository.FlightsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,8 +19,9 @@ public class FlightsController {
 
 
     @GetMapping
-    private ResponseEntity<List<Flights>> findAll() {
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(flightsRepository.findAll());
+    public ResponseEntity<List<Flight>> findAll() {
+        List<Flight> flights = flightsRepository.findAll();
+
+        return ResponseEntity.ok(flights);
     }
 }
