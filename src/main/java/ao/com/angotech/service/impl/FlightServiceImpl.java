@@ -1,7 +1,9 @@
 package ao.com.angotech.service.impl;
 
+import ao.com.angotech.dto.FlightsDto;
 import ao.com.angotech.exception.FlightAlreadyExistsException;
 import ao.com.angotech.exception.NotFoundException;
+import ao.com.angotech.mapper.FlightsMapper;
 import ao.com.angotech.model.Flight;
 import ao.com.angotech.repository.FlightsRepository;
 import ao.com.angotech.service.FlightService;
@@ -38,26 +40,26 @@ public class FlightServiceImpl implements FlightService {
 
     @Override
     @Transactional
-    public Flight create(Flight flight) {
+    public Flight create(FlightsDto dto) {
 
-        Optional<Flight> existsFlightNumber = flightsRepository.findByFlightNumber(flight.getFlightNumber());
+        Optional<Flight> existsFlightNumber = flightsRepository.findByFlightNumber(dto.getFlightNumber());
 
         if ( existsFlightNumber.isPresent() ) {
-            throw new FlightAlreadyExistsException("Flight number " + flight.getFlightNumber() + " already exists.");
+            throw new FlightAlreadyExistsException("Flight number " + dto.getFlightNumber() + " already exists.");
         }
 
-        return flightsRepository.save(flight);
+        return flightsRepository.save(FlightsMapper.fromDtoToEntity(dto));
 
     }
 
     @Override
     @Transactional
-    public Flight update(Long id, Flight flight) {
+    public Flight update(Long id, FlightsDto dto) {
 
-        Optional<Flight> existsFlightNumber = flightsRepository.findByFlightNumber(flight.getFlightNumber());
+        Optional<Flight> existsFlightNumber = flightsRepository.findByFlightNumber(dto.getFlightNumber());
 
         if ( existsFlightNumber.isPresent() && existsFlightNumber.get().getId() != id ) {
-            throw new FlightAlreadyExistsException("Flight number " + flight.getFlightNumber() + " already exists.");
+            throw new FlightAlreadyExistsException("Flight number " + dto.getFlightNumber() + " already exists.");
         }
 
         Optional<Flight> flight1 = flightsRepository.findById(id);
@@ -66,8 +68,8 @@ public class FlightServiceImpl implements FlightService {
             throw new NotFoundException("Entity not found");
         }
 
-        flight.setId(id);
-        return flightsRepository.save(flight);
+        dto.setId(id);
+        return flightsRepository.save(FlightsMapper.fromDtoToEntity(dto));
     }
 
     @Override
