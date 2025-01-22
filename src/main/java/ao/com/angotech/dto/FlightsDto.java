@@ -25,6 +25,8 @@ public class FlightsDto {
 
     private Integer availableSeats;
 
+    private Integer totalSeats;
+
     private Timestamp arrivalTime;
 
     private BigDecimal price;
@@ -35,7 +37,7 @@ public class FlightsDto {
 
     public FlightsDto() {}
 
-    public FlightsDto(Long id, String airline, String flightNumber, String origin, String destination, Timestamp departureTime, Integer availableSeats, Timestamp arrivalTime, BigDecimal price, Timestamp created_at, Timestamp updated_at) {
+    public FlightsDto(Long id, String airline, String flightNumber, String origin, String destination, Timestamp departureTime, Integer availableSeats, Integer totalSeats, Timestamp arrivalTime, BigDecimal price, Timestamp created_at, Timestamp updated_at) {
         this.id = id;
         this.airline = airline;
         this.flightNumber = flightNumber;
@@ -43,6 +45,7 @@ public class FlightsDto {
         this.destination = destination;
         this.departureTime = departureTime;
         this.availableSeats = availableSeats;
+        this.totalSeats = totalSeats;
         this.arrivalTime = arrivalTime;
         this.price = price;
         this.created_at = created_at;
@@ -103,6 +106,14 @@ public class FlightsDto {
 
     public void setAvailableSeats(Integer availableSeats) {
         this.availableSeats = availableSeats;
+    }
+
+    public Integer getTotalSeats() {
+        return totalSeats;
+    }
+
+    public void setTotalSeats(Integer totalSeats) {
+        this.totalSeats = totalSeats;
     }
 
     public Timestamp getArrivalTime() {
