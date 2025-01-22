@@ -14,6 +14,7 @@ public class FlightsMapper {
         flight.setArrivalTime(dto.getArrivalTime());
         flight.setDestination(flight.getDestination());
         flight.setAvailableSeats(dto.getAvailableSeats());
+        flight.setTotalSeats(dto.getTotalSeats());
         flight.setCreated_at(dto.getCreated_at());
         flight.setDepartureTime(dto.getDepartureTime());
         flight.setOrigin(dto.getOrigin());
