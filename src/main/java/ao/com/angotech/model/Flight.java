@@ -49,6 +49,10 @@ public class Flight implements Serializable {
     @JsonProperty("availableSeats")
     private Integer availableSeats;
 
+    @Column(name = "total_seats")
+    @JsonProperty("totalSeats")
+    private Integer totalSeats;
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "arrival_time")
     @JsonProperty("arrivalTime")
@@ -122,6 +126,14 @@ public class Flight implements Serializable {
 
     public void setAvailableSeats(Integer availableSeats) {
         this.availableSeats = availableSeats;
+    }
+
+    public Integer getTotalSeats() {
+        return totalSeats;
+    }
+
+    public void setTotalSeats(Integer totalSeats) {
+        this.totalSeats = totalSeats;
     }
 
     public Timestamp getArrivalTime() {
