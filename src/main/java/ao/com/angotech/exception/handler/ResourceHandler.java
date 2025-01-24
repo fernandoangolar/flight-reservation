@@ -4,9 +4,14 @@ import ao.com.angotech.dto.error.ErrorResponseDto;
 import ao.com.angotech.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.ErrorResponse;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestControllerAdvice
 public class ResourceHandler {
@@ -69,6 +74,31 @@ public class ResourceHandler {
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(errorResponseDto);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponseDto> badRequestException(MethodArgumentNotValidException m) {
+
+        Map<String, String> messages = new HashMap<>();
+        m.getBindingResult().getAllErrors().forEach(error -> {
+            String field = ((FieldError) error).getField();
+            String defaultMessage = error.getDefaultMessage();
+            messages.put(field, defaultMessage);
+        });
+
+        ErrorResponseDto errorResponseDto = new ErrorResponseDto();
+        errorResponseDto.setMessage(Arrays.toString(messages.entrySet().toArray()));
+        errorResponseDto.setHttpStatus(HttpStatus.BAD_REQUEST);
+        errorResponseDto.setStatusCode(HttpStatus.BAD_REQUEST.value());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponseDto);
+
+
+//        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorResponseDto.builder()
+//                .message(Arrays.toString(messages.entrySet().toArray()))
+//                .httpStatus(HttpStatus.BAD_REQUEST)
+//                .statusCode(HttpStatus.BAD_REQUEST.value())
+//                .build());
     }
 
 }
