@@ -3,6 +3,7 @@ package ao.com.angotech.controller;
 import ao.com.angotech.dto.FlightsDto;
 import ao.com.angotech.model.Flight;
 import ao.com.angotech.service.FlightService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,13 +33,13 @@ public class FlightsController {
     }
 
     @PostMapping
-    public ResponseEntity<Flight> create(@RequestBody FlightsDto dto) {
+    public ResponseEntity<Flight> create(@Valid @RequestBody FlightsDto dto) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(flightService.create(dto));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Flight> create(@PathVariable Long id, @RequestBody FlightsDto dto) {
+    public ResponseEntity<Flight> update(@PathVariable Long id, @Valid @RequestBody FlightsDto dto) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(flightService.update(id, dto));
     }
