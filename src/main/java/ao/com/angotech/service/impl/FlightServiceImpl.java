@@ -1,8 +1,7 @@
 package ao.com.angotech.service.impl;
 
 import ao.com.angotech.dto.FlightsDto;
-import ao.com.angotech.exception.FlightAlreadyExistsException;
-import ao.com.angotech.exception.NotFoundException;
+import ao.com.angotech.exception.*;
 import ao.com.angotech.mapper.FlightsMapper;
 import ao.com.angotech.model.Flight;
 import ao.com.angotech.repository.FlightsRepository;
@@ -28,13 +27,7 @@ public class FlightServiceImpl implements FlightService {
     @Override
     public Flight findById(Long id) {
 
-        Optional<Flight> flight = flightsRepository.findById(id);
-
-        if ( flight.isEmpty() ) {
-            throw new NotFoundException("Entity not found");
-        }
-
-        return flight.get();
+        return getFlight(id);
 
     }
 
@@ -42,11 +35,13 @@ public class FlightServiceImpl implements FlightService {
     @Transactional
     public Flight create(FlightsDto dto) {
 
-        Optional<Flight> existsFlightNumber = flightsRepository.findByFlightNumber(dto.getFlightNumber());
+        existsNumberFlight(dto);
 
-        if ( existsFlightNumber.isPresent() ) {
-            throw new FlightAlreadyExistsException("Flight number " + dto.getFlightNumber() + " already exists.");
-        }
+        invalidFlightSchedule(dto);
+
+        invalidSeat(dto);
+
+        invalidRoute(dto);
 
         return flightsRepository.save(FlightsMapper.fromDtoToEntity(dto));
 
@@ -62,11 +57,13 @@ public class FlightServiceImpl implements FlightService {
             throw new FlightAlreadyExistsException("Flight number " + dto.getFlightNumber() + " already exists.");
         }
 
-        Optional<Flight> flight1 = flightsRepository.findById(id);
+        invalidFlightSchedule(dto);
 
-        if ( flight1.isEmpty() ) {
-            throw new NotFoundException("Entity not found");
-        }
+        invalidSeat(dto);
+
+        getFlight(id);
+
+        invalidRoute(dto);
 
         dto.setId(id);
         return flightsRepository.save(FlightsMapper.fromDtoToEntity(dto));
@@ -75,14 +72,55 @@ public class FlightServiceImpl implements FlightService {
     @Override
     public void delete(Long id) {
 
+        getFlight(id);
+
+        flightsRepository.deleteById(id);
+    }
+
+
+    private Flight getFlight(Long id) {
+
         Optional<Flight> flight1 = flightsRepository.findById(id);
 
         if ( flight1.isEmpty() ) {
             throw new NotFoundException("Entity not found");
         }
 
-        flightsRepository.deleteById(id);
+        return flight1.get();
+
     }
 
+    private Optional<Flight> existsNumberFlight(FlightsDto dto) {
 
+        Optional<Flight> existsFlightNumber = flightsRepository.findByFlightNumber(dto.getFlightNumber());
+
+        if ( existsFlightNumber.isPresent() ) {
+            throw new FlightAlreadyExistsException("Flight number " + dto.getFlightNumber() + " already exists.");
+        }
+
+        return existsFlightNumber;
+
+    }
+
+    private void invalidRoute(FlightsDto dto) {
+
+        if ( dto.getOrigin().equalsIgnoreCase(dto.getDestination()) ) {
+            throw new InvalidFlightRouteException("The flight destination cannot be the same as the origin.");
+        }
+
+    }
+
+    private void invalidSeat(FlightsDto dto) {
+
+        if ( dto.getAvailableSeats() > dto.getTotalSeats() ) {
+            throw new InvalidSeatAllocationException("Available seats cannot exceed the total number of seats on the flight.");
+        }
+
+    }
+
+    private void invalidFlightSchedule(FlightsDto dto) {
+        if ( dto.getArrivalTime().before(dto.getDepartureTime()) ) {
+            throw new InvalidFlightScheduleException("Arrival time must be after the departure time.");
+        }
+    }
 }
