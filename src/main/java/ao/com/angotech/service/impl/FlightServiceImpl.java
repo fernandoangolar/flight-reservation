@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 
@@ -51,11 +52,7 @@ public class FlightServiceImpl implements FlightService {
     @Transactional
     public Flight update(Long id, FlightsDto dto) {
 
-        Optional<Flight> existsFlightNumber = flightsRepository.findByFlightNumber(dto.getFlightNumber());
-
-        if ( existsFlightNumber.isPresent() && existsFlightNumber.get().getId() != id ) {
-            throw new FlightAlreadyExistsException("Flight number " + dto.getFlightNumber() + " already exists.");
-        }
+        validateFlightNumberUniqueness(id, dto.getFlightNumber());
 
         invalidFlightSchedule(dto);
 
@@ -75,6 +72,15 @@ public class FlightServiceImpl implements FlightService {
         getFlight(id);
 
         flightsRepository.deleteById(id);
+    }
+
+    private void validateFlightNumberUniqueness(Long id, String flightNumber) {
+
+        Optional<Flight> existingFlight = flightsRepository.findByFlightNumber(flightNumber);
+
+        if ( existingFlight.isPresent() && !existingFlight.get().getId().equals(id) ) {
+            throw new FlightAlreadyExistsException("Flight number " + flightNumber + " already exists.");
+        }
     }
 
 
@@ -119,6 +125,17 @@ public class FlightServiceImpl implements FlightService {
     }
 
     private void invalidFlightSchedule(FlightsDto dto) {
+
+        Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+
+        if (dto.getDepartureTime().before(currentTimestamp)) {
+            throw new InvalidFlightScheduleException("Departure time cannot be in the past.");
+        }
+
+        if (dto.getArrivalTime().before(currentTimestamp)) {
+            throw new InvalidFlightScheduleException("Arrival time cannot be in the past.");
+        }
+
         if ( dto.getArrivalTime().before(dto.getDepartureTime()) ) {
             throw new InvalidFlightScheduleException("Arrival time must be after the departure time.");
         }
