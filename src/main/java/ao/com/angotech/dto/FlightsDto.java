@@ -1,10 +1,6 @@
 package ao.com.angotech.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.Column;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -13,26 +9,48 @@ public class FlightsDto {
 
     private Long id;
 
+    @NotBlank(message = "Airline cannot be empty.")
+    @Size(max = 100, message = "Airline name must not exceed 100 characters.")
     private String airline;
 
+    @NotBlank(message = "Flight number cannot be empty.")
+    @Size(max = 10, message = "Flight number must not exceed 10 characters.")
     private String flightNumber;
 
+    @NotBlank(message = "Origin cannot be empty.")
+    @Size(max = 50, message = "Origin must not exceed 50 characters.")
     private String origin;
 
+    @NotBlank(message = "Destination cannot be empty.")
+    @Size(max = 50, message = "Destination must not exceed 50 characters.")
     private String destination;
 
+    @NotNull(message = "Departure time cannot be null.")
+    @Future(message = "Departure time must be in the future.")
     private Timestamp departureTime;
 
+    @NotNull(message = "Available seats cannot be null.")
+    @PositiveOrZero(message = "Available seats must be zero or positive.")
+    @Max(value = 1000, message = "Available seats cannot exceed 1000.")
     private Integer availableSeats;
 
+    @NotNull(message = "Total seats cannot be null.")
+    @Positive(message = "Total seats must be a positive number.")
+    @Max(value = 1000, message = "Total seats cannot exceed 1000.")
     private Integer totalSeats;
 
+    @NotNull(message = "Arrival time cannot be null.")
+    @Future(message = "Arrival time must be in the future.")
     private Timestamp arrivalTime;
 
+    @NotNull(message = "Price cannot be null.")
+    @DecimalMin(value = "0.0", inclusive = false, message = "Price must be greater than zero.")
     private BigDecimal price;
 
+    @NotNull(message = "Created at timestamp cannot be null.")
     private Timestamp created_at;
 
+    @NotNull(message = "Updated at timestamp cannot be null.")
     private Timestamp updated_at;
 
     public FlightsDto() {}
