@@ -1,7 +1,7 @@
 
 -- Creating Users Table
 CREATE TABLE `users` (
-             `user_id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+             `user_id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
              `first_name` VARCHAR(50) NOT NULL,
              `last_name` VARCHAR(50) NOT NULL,
              `email` VARCHAR(100) NOT NULL,
@@ -29,8 +29,8 @@ CREATE TABLE `flights` (
 
 -- Creating Bookings Table
 CREATE TABLE `bookings` (
-             `booking_id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-             `user_id` INT NOT NULL,
+             `booking_id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+             `user_id` BIGINT NOT NULL,
              `flight_id` INT NOT NULL,
              `booking_code` VARCHAR(50) NOT NULL,
              `seat_number` VARCHAR(500) NOt NULL,
@@ -42,8 +42,8 @@ CREATE TABLE `bookings` (
 
 -- Creating Payments Table
 CREATE TABLE `payments` (
-             `payment_id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-             `booking_id` INT NOT NULL,
+             `payment_id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+             `booking_id` BIGINT NOT NULL,
              `amount` DECIMAL(10,2) CHECK (amount > 0) NOT NULL,
              `payment_method` VARCHAR(50) CHECK (payment_method IN ('CREDIT_CARD', 'PAYPAL', 'BANK_TRANSFER)')) NOT NULL,
              `payment_status` VARCHAR(20) CHECK (payment_status IN ('PENDING', 'COMPLETED', 'FAILED')) NOT NULL,
@@ -55,7 +55,7 @@ CREATE TABLE `payments` (
 -- Creating Notifications Table
 CREATE TABLE `notifications` (
              `notification_id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-             `user_id` INT NOT NULL,
+             `user_id` BIGINT NOT NULL,
              `message` TEXT NOT NULL,
              `sent_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
              `notification_type` VARCHAR(20) CHECK (notification_type IN ('EMAIL', 'SMS')) NOT NULL,
