@@ -4,9 +4,7 @@ package ao.com.angotech.model;
 import ao.com.angotech.enums.RoleEnum;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -16,38 +14,53 @@ import java.sql.Timestamp;
 @Table(name = "users")
 public class User {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
     private Long id;
+
+    @Column(name = "first_name", nullable = false)
     private String firstName;
+
+    @Column(name = "last_name", nullable = false)
     private String lastName;
+
+    @Column(nullable = false)
     private String email;
 
+    @Column(nullable = false)
+    private String phone;
+
+    @Column(nullable = false)
     private String password;
 
+    @Enumerated(EnumType.STRING)
     private RoleEnum role;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(updatable = false)
     @CreationTimestamp
     @JsonProperty("created_at")
-    private Timestamp created_at;
+    private Timestamp createdAt;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @UpdateTimestamp
     @JsonProperty("updated_at")
-    private Timestamp updated_at;
+    private Timestamp updatedAt;
 
     public User() {
     }
 
-    public User(Long id, String firstName, String lastName, String email, String password, RoleEnum role, Timestamp created_at, Timestamp updated_at) {
+    public User(Long id, String firstName, String lastName, String email, String phone, String password, RoleEnum role, Timestamp created_at, Timestamp updated_at) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+        this.phone = phone;
         this.password = password;
         this.role = role;
-        this.created_at = created_at;
-        this.updated_at = updated_at;
+        this.createdAt = created_at;
+        this.updatedAt = updated_at;
     }
 
     public Long getId() {
@@ -82,6 +95,14 @@ public class User {
         this.email = email;
     }
 
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
     public String getPassword() {
         return password;
     }
@@ -98,19 +119,19 @@ public class User {
         this.role = role;
     }
 
-    public Timestamp getCreated_at() {
-        return created_at;
+    public Timestamp getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreated_at(Timestamp created_at) {
-        this.created_at = created_at;
+    public void setCreatedAt(Timestamp createdAt) {
+        this.createdAt = createdAt;
     }
 
-    public Timestamp getUpdated_at() {
-        return updated_at;
+    public Timestamp getUpdatedAt() {
+        return updatedAt;
     }
 
-    public void setUpdated_at(Timestamp updated_at) {
-        this.updated_at = updated_at;
+    public void setUpdatedAt(Timestamp updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }
