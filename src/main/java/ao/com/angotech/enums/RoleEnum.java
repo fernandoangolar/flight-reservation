@@ -2,7 +2,7 @@ package ao.com.angotech.enums;
 
 public enum RoleEnum {
 
-    CLIENTE("cliente"),
+    CUSTOMER("customer"),
     ADMIN("admin");
 
     private String role;
