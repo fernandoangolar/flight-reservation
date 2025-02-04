@@ -1,5 +1,6 @@
 package ao.com.angotech.model;
 
+import ao.com.angotech.enums.FlightStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -60,6 +61,11 @@ public class Flight implements Serializable {
 
     @JsonProperty("price")
     private BigDecimal price;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    @JsonProperty("status")
+    private FlightStatus status;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(updatable = false)
@@ -150,6 +156,14 @@ public class Flight implements Serializable {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    public FlightStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(FlightStatus status) {
+        this.status = status;
     }
 
     public Timestamp getCreated_at() {

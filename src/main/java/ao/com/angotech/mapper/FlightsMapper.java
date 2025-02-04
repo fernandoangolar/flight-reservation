@@ -19,6 +19,7 @@ public class FlightsMapper {
         flight.setDepartureTime(dto.getDepartureTime());
         flight.setOrigin(dto.getOrigin());
         flight.setPrice(dto.getPrice());
+        flight.setStatus(dto.getStatus());
         flight.setUpdated_at(dto.getUpdated_at());
 
         return flight;

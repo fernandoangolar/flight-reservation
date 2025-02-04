@@ -4,6 +4,7 @@ import ao.com.angotech.dto.FlightsDto;
 import ao.com.angotech.exception.*;
 import ao.com.angotech.mapper.FlightsMapper;
 import ao.com.angotech.model.Flight;
+import ao.com.angotech.enums.FlightStatus;
 import ao.com.angotech.repository.FlightsRepository;
 import ao.com.angotech.service.FlightService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +45,14 @@ public class FlightServiceImpl implements FlightService {
 
         invalidRoute(dto);
 
-        return flightsRepository.save(FlightsMapper.fromDtoToEntity(dto));
+
+        Flight flight = FlightsMapper.fromDtoToEntity(dto);
+
+        if ( flight.getStatus() == null ) {
+            flight.setStatus(FlightStatus.SCHEDULED);
+        }
+
+        return flightsRepository.save(flight);
 
     }
 

@@ -1,5 +1,6 @@
 package ao.com.angotech.dto;
 
+import ao.com.angotech.enums.FlightStatus;
 import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
@@ -46,6 +47,9 @@ public class FlightsDto {
     @NotNull(message = "Price cannot be null.")
     @DecimalMin(value = "0.0", inclusive = false, message = "Price must be greater than zero.")
     private BigDecimal price;
+
+    @NotNull(message = "Flight status cannot be null")
+    private FlightStatus status;
 
     @NotNull(message = "Created at timestamp cannot be null.")
     private Timestamp created_at;
@@ -148,6 +152,14 @@ public class FlightsDto {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    public FlightStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(FlightStatus status) {
+        this.status = status;
     }
 
     public Timestamp getCreated_at() {
